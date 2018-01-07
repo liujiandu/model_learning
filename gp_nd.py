@@ -82,7 +82,7 @@ def number_mse(x_dim):
 
 def xdim_mse(num_points):
     """
-    :Parma num_points:
+    :Param num_points:
         number of sampled data points
     """
     mses = []
