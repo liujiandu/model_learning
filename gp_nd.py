@@ -19,7 +19,9 @@ def target(x):
     z=0
     n=x.shape[1]
     for i in range(n):
-        z += np.exp(-(x[:,i]-2)**2)+np.exp(-(x[:,i]-6)**2/5)+1/(x[:,i]**2+1)+0.1*np.sin(5*x[:,i])-0.5
+
+        #z += np.exp(-(x[:,i]-2)**2)+np.exp(-(x[:,i]-6)**2/5)+1/(x[:,i]**2+1)+0.1*np.sin(5*x[:,i])-0.5
+        z+=x[:,i]
     return z/n
 
 def gp_fit(X, Y, x):
@@ -62,42 +64,44 @@ def eval(func, points_num, bounds, x_dim):
 
 
 
-def number_mse(x_dim):
+def number_mse(x_dim, num):
     """
     :Parma x_dim:
         dimension of x
     """
     mses = []
     bounds=[-5*np.ones(x_dim), 10*np.ones(x_dim)]
-    for i in range(1,50):
-        mse = eval(target, 10*i, bounds, x_dim)
+    for i in range(1,num):
+        mse = eval(target, 100*i, bounds, x_dim)
         mses.append(mse)
-
-    plt.plot(range(1,50), mses, linewidth=2)
-    plt.plot(range(1,50), mses, "D", markersize=6)
+    print mses
+    plt.plot(range(1,num), mses, linewidth=2)
+    plt.plot(range(1,num), mses, "D", markersize=6)
     plt.xlabel('sampled points number')
     plt.ylabel('mean square error')
     plt.grid(True)
     plt.show()
 
-def xdim_mse(num_points):
+def xdim_mse(num_points, num):
     """
     :Param num_points:
         number of sampled data points
+    :Param num:
+        repeat times
     """
     mses = []
-    bounds=[-5*np.ones(i), 10*np.ones(i)]
-    for x_dim in range(1,10):
+    for x_dim in range(1,num):
+        bounds=[-5*np.ones(x_dim), 10*np.ones(x_dim)]
         mse = eval(target, num_points, bounds, x_dim)
         mses.append(mse)
-
-    plt.plot(range(1,10), mses, linewidth=2)
-    plt.plot(range(1,10), mses, "D", markersize=6)
+    print mses
+    plt.plot(range(1,num), mses, linewidth=2)
+    plt.plot(range(1,num), mses, "D", markersize=6)
     plt.xlabel('x dimension')
     plt.ylabel('mean square error')
     plt.grid(True)
     plt.show()
 
 if __name__=="__main__":
-    number_mse(3)
-    #xdim_mse(50)
+    number_mse(2,5)
+    #xdim_mse(50, 10)
